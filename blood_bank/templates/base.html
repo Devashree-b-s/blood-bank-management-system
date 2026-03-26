@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>{% block title %}BloodLink{% endblock %}</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"/>
+</head>
+<body>
+
+  <nav class="navbar">
+    <a href="/" class="brand">🩸 BloodLink</a>
+    <ul class="nav-links">
+      <li><a href="/" class="{% if request.path == '/' %}active{% endif %}">Dashboard</a></li>
+      <li><a href="/donors" class="{% if '/donors' in request.path %}active{% endif %}">Donors</a></li>
+      <li><a href="/requests" class="{% if '/requests' in request.path %}active{% endif %}">Requests</a></li>
+      <li><a href="/stock" class="{% if '/stock' in request.path %}active{% endif %}">Stock</a></li>
+      <li><a href="/search" class="{% if '/search' in request.path %}active{% endif %}">Search</a></li>
+    </ul>
+    <a href="/add-donor" class="btn-nav">+ Add Donor</a>
+  </nav>
+
+  <main class="main-content">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }}">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="footer">
+    <p>BloodLink — Blood Bank Management System &copy; 2026</p>
+  </footer>
+
+</body>
+</html>

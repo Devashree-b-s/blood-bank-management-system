@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}Search — BloodLink{% endblock %}
+{% block content %}
+
+<div class="page-header">
+  <div>
+    <h1 class="page-title">Search Donors</h1>
+    <p class="page-sub">Find donors by blood group</p>
+  </div>
+</div>
+
+<div class="form-card search-card">
+  <form method="GET" action="/search" class="search-form">
+    <select name="blood_group" class="input-field large">
+      <option value="">Select Blood Group</option>
+      {% for bg in blood_groups %}
+      <option value="{{ bg }}" {% if selected_bg == bg %}selected{% endif %}>{{ bg }}</option>
+      {% endfor %}
+    </select>
+    <button type="submit" class="btn btn-primary large">🔍 Search</button>
+  </form>
+</div>
+
+{% if selected_bg %}
+  {% if stock %}
+  <div class="section-card stock-result {% if stock.units == 0 %}empty{% elif stock.units < 5 %}low{% else %}ok{% endif %}">
+    <strong>{{ selected_bg }}</strong> — {{ stock.units }} units available in stock
+  </div>
+  {% endif %}
+
+  <div class="section-card">
+    <h2 class="section-title">Donors with {{ selected_bg }}</h2>
+    {% if donors %}
+    <table class="table">
+      <thead>
+        <tr><th>Name</th><th>Age</th><th>Contact</th><th>City</th><th>Last Donation</th></tr>
+      </thead>
+      <tbody>
+        {% for donor in donors %}
+        <tr>
+          <td><strong>{{ donor.name }}</strong></td>
+          <td>{{ donor.age }}</td>
+          <td>{{ donor.contact }}</td>
+          <td>{{ donor.city or '—' }}</td>
+          <td>{{ donor.last_donation or '—' }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <div class="empty-state">
+      <p>No donors found for blood group <strong>{{ selected_bg }}</strong>.</p>
+    </div>
+    {% endif %}
+  </div>
+{% endif %}
+
+{% endblock %}

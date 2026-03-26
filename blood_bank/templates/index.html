@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% block title %}Dashboard — BloodLink{% endblock %}
+{% block content %}
+
+<div class="page-header">
+  <div>
+    <h1 class="page-title">Dashboard</h1>
+    <p class="page-sub">Real-time overview of your blood bank</p>
+  </div>
+  <a href="/add-donor" class="btn btn-primary">+ Register Donor</a>
+</div>
+
+<!-- Stats -->
+<div class="stats-grid">
+  <div class="stat-card stat-red">
+    <div class="stat-icon">🩸</div>
+    <div class="stat-info">
+      <div class="stat-num">{{ total_donors }}</div>
+      <div class="stat-label">Total Donors</div>
+    </div>
+  </div>
+  <div class="stat-card stat-blue">
+    <div class="stat-icon">📋</div>
+    <div class="stat-info">
+      <div class="stat-num">{{ total_requests }}</div>
+      <div class="stat-label">Total Requests</div>
+    </div>
+  </div>
+  <div class="stat-card stat-orange">
+    <div class="stat-icon">⏳</div>
+    <div class="stat-info">
+      <div class="stat-num">{{ pending_requests }}</div>
+      <div class="stat-label">Pending Requests</div>
+    </div>
+  </div>
+  <div class="stat-card stat-green">
+    <div class="stat-icon">🏥</div>
+    <div class="stat-info">
+      <div class="stat-num">{{ stock|length }}</div>
+      <div class="stat-label">Blood Types Tracked</div>
+    </div>
+  </div>
+</div>
+
+<!-- Blood Stock Overview -->
+<div class="section-card">
+  <h2 class="section-title">Blood Stock Overview</h2>
+  <div class="blood-grid">
+    {% for s in stock %}
+    <div class="blood-badge {% if s.units == 0 %}empty{% elif s.units < 5 %}low{% else %}ok{% endif %}">
+      <div class="blood-type">{{ s.blood_group }}</div>
+      <div class="blood-units">{{ s.units }} <span>units</span></div>
+      <div class="blood-status">
+        {% if s.units == 0 %}Out of Stock
+        {% elif s.units < 5 %}Low Stock
+        {% else %}Available{% endif %}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="section-card">
+  <h2 class="section-title">Quick Actions</h2>
+  <div class="quick-actions">
+    <a href="/add-donor" class="action-card">
+      <span class="action-icon">➕</span>
+      <span>Register Donor</span>
+    </a>
+    <a href="/add-request" class="action-card">
+      <span class="action-icon">📝</span>
+      <span>New Request</span>
+    </a>
+    <a href="/search" class="action-card">
+      <span class="action-icon">🔍</span>
+      <span>Search Donors</span>
+    </a>
+    <a href="/stock" class="action-card">
+      <span class="action-icon">📦</span>
+      <span>Manage Stock</span>
+    </a>
+  </div>
+</div>
+
+{% endblock %}

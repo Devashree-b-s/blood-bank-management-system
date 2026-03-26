@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Blood Stock — BloodLink{% endblock %}
+{% block content %}
+
+<div class="page-header">
+  <div>
+    <h1 class="page-title">Blood Stock</h1>
+    <p class="page-sub">Manage blood unit inventory</p>
+  </div>
+</div>
+
+<div class="blood-grid large">
+  {% for s in stock %}
+  <div class="blood-badge-large {% if s.units == 0 %}empty{% elif s.units < 5 %}low{% else %}ok{% endif %}">
+    <div class="blood-type-large">{{ s.blood_group }}</div>
+    <div class="blood-units-large">{{ s.units }} <span>units</span></div>
+    <div class="blood-status">
+      {% if s.units == 0 %}⚠️ Out of Stock
+      {% elif s.units < 5 %}🟡 Low Stock
+      {% else %}✅ Available{% endif %}
+    </div>
+    <form method="POST" action="/update-stock" class="stock-form">
+      <input type="hidden" name="blood_group" value="{{ s.blood_group }}"/>
+      <input type="number" name="units" class="input-field small" value="{{ s.units }}" min="0"/>
+      <button type="submit" class="btn btn-primary small">Update</button>
+    </form>
+  </div>
+  {% endfor %}
+</div>
+
+{% endblock %}

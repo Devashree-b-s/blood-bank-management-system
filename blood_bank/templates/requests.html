@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}Requests — BloodLink{% endblock %}
+{% block content %}
+
+<div class="page-header">
+  <div>
+    <h1 class="page-title">Blood Requests</h1>
+    <p class="page-sub">Manage incoming blood requests</p>
+  </div>
+  <a href="/add-request" class="btn btn-primary">+ New Request</a>
+</div>
+
+<div class="section-card">
+  {% if requests %}
+  <table class="table">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Patient</th>
+        <th>Blood Group</th>
+        <th>Units</th>
+        <th>Hospital</th>
+        <th>Contact</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for req in requests %}
+      <tr>
+        <td>{{ loop.index }}</td>
+        <td><strong>{{ req.patient_name }}</strong></td>
+        <td><span class="badge badge-blood">{{ req.blood_group }}</span></td>
+        <td>{{ req.units_needed }}</td>
+        <td>{{ req.hospital or '—' }}</td>
+        <td>{{ req.contact or '—' }}</td>
+        <td>
+          <span class="badge badge-status badge-{{ req.status.lower() }}">{{ req.status }}</span>
+        </td>
+        <td>
+          {% if req.status == 'Pending' %}
+          <a href="/update-request/{{ req.id }}/Approved" class="btn-sm btn-success">Approve</a>
+          <a href="/update-request/{{ req.id }}/Rejected" class="btn-sm btn-danger">Reject</a>
+          {% else %}
+          —
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <div class="empty-state">
+    <p>📋 No requests yet. <a href="/add-request">Add one!</a></p>
+  </div>
+  {% endif %}
+</div>
+
+{% endblock %}

@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block title %}Donors — BloodLink{% endblock %}
+{% block content %}
+
+<div class="page-header">
+  <div>
+    <h1 class="page-title">Donors</h1>
+    <p class="page-sub">All registered blood donors</p>
+  </div>
+  <a href="/add-donor" class="btn btn-primary">+ Add Donor</a>
+</div>
+
+<!-- Filters -->
+<div class="filter-bar">
+  <form method="GET" action="/donors" class="filter-form">
+    <input type="text" name="search" placeholder="Search by name..." value="{{ search }}" class="input-field"/>
+    <select name="blood_group" class="input-field">
+      <option value="">All Blood Groups</option>
+      {% for bg in blood_groups %}
+      <option value="{{ bg }}" {% if bg_filter == bg %}selected{% endif %}>{{ bg }}</option>
+      {% endfor %}
+    </select>
+    <button type="submit" class="btn btn-primary">Filter</button>
+    <a href="/donors" class="btn btn-outline">Clear</a>
+  </form>
+</div>
+
+<!-- Table -->
+<div class="section-card">
+  {% if donors %}
+  <table class="table">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Name</th>
+        <th>Age</th>
+        <th>Blood Group</th>
+        <th>Contact</th>
+        <th>City</th>
+        <th>Last Donation</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for donor in donors %}
+      <tr>
+        <td>{{ loop.index }}</td>
+        <td><strong>{{ donor.name }}</strong></td>
+        <td>{{ donor.age }}</td>
+        <td><span class="badge badge-blood">{{ donor.blood_group }}</span></td>
+        <td>{{ donor.contact }}</td>
+        <td>{{ donor.city or '—' }}</td>
+        <td>{{ donor.last_donation or '—' }}</td>
+        <td>
+          <a href="/delete-donor/{{ donor.id }}" class="btn-sm btn-danger"
+             onclick="return confirm('Remove this donor?')">Delete</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <div class="empty-state">
+    <p>😔 No donors found. <a href="/add-donor">Add one now!</a></p>
+  </div>
+  {% endif %}
+</div>
+
+{% endblock %}
