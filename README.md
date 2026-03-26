@@ -45,7 +45,7 @@ The Blood Bank Management System is a web-based application developed to efficie
 
 ## 📸 Screenshots
 
-(Add screenshots here to make your project more attractive)
+
 
 ---<img width="1919" height="909" alt="Screenshot 2026-03-26 171241" src="https://github.com/user-attachments/assets/39044c59-11e4-4eb1-863d-41187f81b71e" />
 
